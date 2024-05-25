@@ -78,11 +78,11 @@ sendPhoto({
 Объекты `FormattedString` (или их массивы) можно использовать при подстановке в другие вызовы `fmt`:
 
 ```js
-const formatted = fmt`Участники:\n${
-  users.map(user => fmt`\n${[
+const formatted = fmt`Участники:\n\n${
+  FormattedString.join(users.map(user => fmt`${[
     fmt`${[user.firstName, 'bold']} ${user.lastName}`,
     { type: 'text_link', url: user.website }
-  ]}`)
+  ]}`), '\n')
 }`;
 ```
 
