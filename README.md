@@ -13,7 +13,7 @@ npm install tg-format
 Самый простой способ разметки — при помощи [HTML-тегов](https://core.telegram.org/bots/api#html-style). Однако при подстановке пользовательских данных в тело сообщения в них необходимо экранировать символы '&lt;', '&gt;' и '&amp;'. Для этого доступна функция `html`, которую предполагается использовать в [tagged template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates):
 
 ```js
-const { html } = require('tgformat');
+const { html } = require('tg-format');
 
 // Предполагается, что функция sendMessage вызывает соответствующий метод Telegram Bot API
 sendMessage({
@@ -38,7 +38,7 @@ console.log(html`Name: <b>${hackyName}</b>`); // Выведет 'Name: <b>foo&lt
 Более продвинутый способ создания форматированного текста — с помощью [массива сущностей](https://core.telegram.org/bots/api#messageentity) (который передаётся в параметре `entities` или `caption_entities`). Для этого используйте функцию `fmt`:
 
 ```js
-const { fmt } = require('tgformat');
+const { fmt } = require('tg-format');
 
 // Предполагается, что функция sendMessage вызывает соответствующий метод Telegram Bot API
 const formatted = fmt`Имя пользователя: ${[user.firstName, 'bold']} ${user.lastName}`;
