@@ -80,16 +80,23 @@ class FormattedString {
       [entitiesField]: this.entities,
     };
   }
-  // TODO: padStart, padEnd, normalize, replace, replaceAll, split, trim, trimStart, trimEnd
+
+  // TODO: padStart, padEnd, replace, replaceAll, split, trim, trimStart, trimEnd
 }
 
-for (let method of ['charAt', 'charCodeAt', 'codePointAt', 'endsWith', 'includes', 'indexOf',
+for (const method of ['charAt', 'charCodeAt', 'codePointAt', 'endsWith', 'includes', 'indexOf',
   'isWellFormed', 'lastIndexOf', 'localeCompare', 'match', 'matchAll', 'normalize',
-  'search', 'split', 'startsWith', 'toLocaleLowerCase', 'toLocaleUpperCase', 'toLowerCase',
-  'toString', 'toUpperCase', 'toWellFormed', 'trim', 'trimEnd', 'trimStart']) {
+  'search', 'startsWith', 'toWellFormed']) {
   // Lift some methods from String class
   FormattedString.prototype[method] = function() {
     return this.text[method].apply(this.text, arguments);
+  }
+}
+for (const method of ['toLocaleLowerCase', 'toLocaleUpperCase', 'toLowerCase', 'toUpperCase']) {
+  FormattedString.prototype[method] = function() {
+    const result = new FormattedString(this.text[method].apply(this.text, arguments));
+    result.entities = this.entities.map(entity => Object.assign({}, entity));
+    return result;
   }
 }
 
