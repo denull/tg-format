@@ -7,6 +7,10 @@ function html(strs, ...exprs) {
   return text;
 }
 
+function isFormattedLike(object) {
+  return object && 'text' in other && 'entities' in other && Array.isArray(entities);
+}
+
 class FormattedString {
   constructor(...vals) {
     this.text = '';
@@ -28,8 +32,8 @@ class FormattedString {
         // Flatten all nested arrays
         this.append(...other);
       } else
-      if (other instanceof FormattedString) {
-        // Merge entities
+      if (isFormattedLike(other)) {
+        // FormattedString or something similar; merge entities
         const len = this.text.length;
         this.text += other.text;
         for (let entity of other.entities) {
@@ -112,7 +116,7 @@ function fmt(strs, ...exprs) {
       do {
         // Always append first element and all FormattedStrings/Arrays
         builder.append(expr[j++]);
-      } while (expr[j] instanceof FormattedString || Array.isArray(expr[j]));
+      } while (isFormattedLike(expr[j]) || Array.isArray(expr[j]));
       const length = builder.text.length - offset;
       for (; length && j < expr.length; j++, k++) {
         // Rest describes either entity types, or full entities (falsy values are filtered out)
