@@ -8,7 +8,7 @@ function html(strs, ...exprs) {
 }
 
 function isFormattedLike(object) {
-  return object && 'text' in other && 'entities' in other && Array.isArray(entities);
+  return object && ('text' in object) && ('entities' in object) && Array.isArray(object.entities);
 }
 
 class FormattedString {
