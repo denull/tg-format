@@ -11,6 +11,14 @@ function isFormattedLike(object) {
   return object && (typeof object == 'object') && ('text' in object) && ('entities' in object) && Array.isArray(object.entities);
 }
 
+function detectType(object) {
+  if ('type' in object) return;
+  if ('url' in object) return 'text_link';
+  if ('user' in object) return 'text_mention';
+  if ('language' in object) return 'pre';
+  if ('custom_emoji_id' in object) return 'custom_emoji';
+}
+
 class FormattedString {
   constructor(...vals) {
     this.text = '';
@@ -122,7 +130,11 @@ function fmt(strs, ...exprs) {
         // Rest describes either entity types, or full entities (falsy values are filtered out)
         expr[j] && builder.entities.splice(k, 0, typeof expr[j] == 'string' ?
           { type: expr[j], offset, length } :
-          Object.assign(expr[j], { offset, length })
+          Object.assign(
+            detectType(expr[j]) ? { type: detectType(expr[j]) } : {},
+            expr[j],
+            { offset, length },
+          )
         );
       }
     } else {
